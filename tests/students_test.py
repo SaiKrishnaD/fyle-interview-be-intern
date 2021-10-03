@@ -24,15 +24,26 @@ def test_get_assignments_student_2(client, h_student_2):
         assert assignment['student_id'] == 2
 
 
+ida = []
+
+
 def test_post_assignment_student_1(client, h_student_1):
     content = 'ABCD TESTPOST'
 
-    response = client.post(
-        '/student/assignments',
-        headers=h_student_1,
-        json={
-            'content': content
-        })
+    response = client.post('/student/assignments', headers=h_student_1, json={'content': content})
+
+    assert response.status_code == 200
+
+    data = response.json['data']
+    assert data['content'] == content
+    assert data['state'] == 'DRAFT'
+    assert data['teacher_id'] is None
+    ida.append(data['id'])
+
+
+def test_upd_assignment_student_1(client, h_student_1):
+    content = 'ABCD TESTPOST upd'
+    response = client.post('/student/assignments', headers=h_student_1, json={'id': ida[0], 'content': content})
 
     assert response.status_code == 200
 

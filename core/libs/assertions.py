@@ -1,7 +1,10 @@
+from marshmallow import ValidationError
 from .exceptions import FyleError
 
 
 def base_assert(error_code, msg):
+    if msg =="Invalid":
+        raise ValidationError(msg)
     raise FyleError(status_code=error_code, message=msg)
 
 
